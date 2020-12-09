@@ -27,14 +27,19 @@ def login(request):
         return Response(status=status.HTTP_400_BAD_REQUEST)
     try:
         user = User.objects.get(login_id=username)
-
         if user.password == password:
-            c = Category.objects.filter(user=user.login_id)
-            category = TodoListSerializer(c, many=True)
-            return Response(data={"token": user.login_id,
-                                  "myTodoList": category.data
-                                  })
+            return Response(data={"token": user.login_id})
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
     except:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+
+@api_view(["POST"])
+def getMyTodoList(request):
+    token = request.data.get("token")
+    c = Category.objects.filter(user=token)
+    category = TodoListSerializer(c, many=True)
+    return Response(data={
+        "myTodoList": category.data
+    })

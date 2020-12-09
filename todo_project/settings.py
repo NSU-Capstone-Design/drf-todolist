@@ -14,7 +14,10 @@ SECRET_KEY = 'z9h6w*(k01ug7owea=a67=13(6e1^lx$1h(^&pv+ne@6ryh+5k'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_WHITELIST = (
+#     'http://:3000',
+# )
 # Application definition
 
 INSTALLED_APPS = [
@@ -27,7 +30,7 @@ INSTALLED_APPS = [
     'todo',
     'user',
     'rest_framework',
-    'drf_yasg',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -38,6 +41,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'todo_project.urls'
