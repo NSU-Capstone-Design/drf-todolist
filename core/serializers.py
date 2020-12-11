@@ -8,6 +8,6 @@ class TodoListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['title', 'created_at', 'user', 'todos']
+        fields = ['id','title', 'created_at', 'user', 'todos']
 
 
