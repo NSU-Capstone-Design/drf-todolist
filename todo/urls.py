@@ -6,6 +6,6 @@ urlpatterns = [
     path('categories/', get_category),
     path('category/', add_category),
     path('category/<int:pk>', del_category),
-    path('todo/', addTodo),
-    path('todo/get/', todo_list)
+    path('todo/<int:pk>', todos),
+    path('addtodo/', addTodo)
 ]

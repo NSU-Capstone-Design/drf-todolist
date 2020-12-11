@@ -16,6 +16,7 @@ def get_category(request):
     serializer = CategorySerializer(category, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+
 @api_view(['POST'])
 def add_category(request):
     token = request.data.get("token")
@@ -68,14 +69,13 @@ def add_todo(request):
 
 # 리스트 전체 조회
 @api_view(['GET', 'DELETE'])
-def todo_list(request):
+def todos(request, pk):
     if request.method == 'GET':
         queryset = Todo.objects.all()
         serializer = TodoSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     else:
-        listPK = request.data.get("listPK")
-        todo_list = Todo.objects.get(pk=listPK)
+        todo_list = Todo.objects.get(pk=pk)
         todo_list.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -88,20 +88,20 @@ def addTodo(request):
     title = request.data.get("title")
     content = request.data.get('content')
 
-    category = Category.objects.get(pk = categoryPK)
+    category = Category.objects.get(pk=categoryPK)
 
     user = authorize(token)
     if not user:
-        return Response(status = status.HTTP_401_UNAUTHORIZED)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     if not title and not content:
-        return Response(status = status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
     elif not title:
-        category.todos.create(title = "<Empty_title>", content = content)
-        return Response(status = status.HTTP_200_OK)
+        category.todos.create(title="<Empty_title>", content=content)
+        return Response(status=status.HTTP_200_OK)
     elif not content:
-        category.todos.create(title = title, content = '')
-        return Response(status = status.HTTP_200_OK)
+        category.todos.create(title=title, content='')
+        return Response(status=status.HTTP_200_OK)
 
-    category.todos.create(title = title, content = content)
-    return Response(status = status.HTTP_200_OK)
+    category.todos.create(title=title, content=content)
+    return Response(status=status.HTTP_200_OK)
