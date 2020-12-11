@@ -9,23 +9,23 @@ from core.serializers import TodoListSerializer
 from rest_framework.views import APIView
 
 
-@api_view(['GET', 'POST'])
-def add_category(request):
-    if request.method == 'GET':
-        token = request.data.get("token")
-        category = Category.objects.filter(user=token)
-        serializer = CategorySerializer(category, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+@api_view(['GET'])
+def get_category(request):
+    token = request.data.get("token")
+    category = Category.objects.filter(user=token)
+    serializer = CategorySerializer(category, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
-    elif request.method == 'POST':
-        token = request.data.get("token")
-        user = authorize(token)
-        if not user:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-        Category.objects.create(title=request.data.get("title"), user=user)
-        return Response(data={
-            "content": "success",
-        }, status=status.HTTP_200_OK)
+@api_view(['POST'])
+def add_category(request):
+    token = request.data.get("token")
+    user = authorize(token)
+    if not user:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+    Category.objects.create(title=request.data.get("title"), user=user)
+    return Response(data={
+        "content": "success",
+    }, status=status.HTTP_200_OK)
 
 
 @api_view(['GET', 'DELETE'])
