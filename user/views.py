@@ -9,17 +9,6 @@ from user.serializers import UserSerializer
 from todo.serializers import CategorySerializer, TodoSerializer
 from core.serializers import TodoListSerializer
 
-
-@api_view(['GET'])
-def status_check(request):
-    """
-    서버의 상태를 확인하는 함수입니다.
-    """
-    return Response({
-        "status": "OK"
-    }, status=status.HTTP_200_OK)
-
-
 @api_view(["POST"])
 def login(request):
     username = request.data.get("username")
@@ -36,14 +25,12 @@ def login(request):
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
-@api_view(["POST"])
+@api_view(["GET"])
 def getMyTodoList(request):
     token = request.data.get("token")
     c = Category.objects.filter(user=token)
     category = TodoListSerializer(c, many=True)
-    return Response(data={
-        "myTodoList": category.data
-    })
+    return Response(category.data, status = status.HTTP_200_OK)
 
 
 '''----------------------------------------------LDK----------------------------'''
