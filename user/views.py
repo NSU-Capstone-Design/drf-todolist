@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from user.models import User
 from todo.models import Category
+from user.serializers import UserSerializer
 from todo.serializers import CategorySerializer, TodoSerializer
 from core.serializers import TodoListSerializer
 
@@ -43,3 +44,19 @@ def getMyTodoList(request):
     return Response(data={
         "myTodoList": category.data
     })
+
+'''----------------------------------------------LDK----------------------------'''
+@api_view(['GET', 'POST'])
+def signUp(request):
+    userID = request.data.get("id")
+    password = request.data.get('password')
+    checkpwd = request.data.get('checkpwd')
+
+    if password != checkpwd:
+        return Response(status = 400)
+    
+    newUser = User(id = userID, password = password)
+    newUser.save()
+    serializer = UserSerializer(newUser)
+    return Response(serializer.data, status = 200)
+    
