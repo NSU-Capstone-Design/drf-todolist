@@ -9,6 +9,7 @@ from user.serializers import UserSerializer
 from todo.serializers import CategorySerializer, TodoSerializer
 from core.serializers import TodoListSerializer
 
+
 @api_view(["POST"])
 def login(request):
     username = request.data.get("username")
@@ -25,12 +26,14 @@ def login(request):
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
-@api_view(["GET"])
+@api_view(["POST"])
 def getMyTodoList(request):
     token = request.data.get("token")
     c = Category.objects.filter(user=token)
     category = TodoListSerializer(c, many=True)
-    return Response(category.data, status = status.HTTP_200_OK)
+    return Response(data={
+        "myTodoList": category.data
+    })
 
 
 '''----------------------------------------------LDK----------------------------'''
