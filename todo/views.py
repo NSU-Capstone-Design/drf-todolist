@@ -9,7 +9,7 @@ from core.serializers import TodoListSerializer
 from rest_framework.views import APIView
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def get_category(request):
     token = request.data.get("token")
     category = Category.objects.filter(user=token)
