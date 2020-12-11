@@ -6,6 +6,7 @@ from todo.models import Todo, Category
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
+
         fields = ['id', 'title', 'created_at', 'user']
 
 
