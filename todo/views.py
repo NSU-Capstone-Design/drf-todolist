@@ -27,6 +27,7 @@ def add_category(request):
             "content": "success",
         }, status = status.HTTP_200_OK)
 
+
 @api_view(['GET', 'DELETE'])
 def del_category(request, pk):
     try:
@@ -41,6 +42,7 @@ def del_category(request, pk):
     elif request.method == 'DELETE':
         category.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 @api_view(["POST"])
 def add_todo(request):
@@ -63,8 +65,9 @@ def add_todo(request):
 
 '''------------------LDK------------------------------'''
 
-#리스트 전체 조회
-@api_view(['GET','DELETE'])
+
+# 리스트 전체 조회
+@api_view(['GET', 'DELETE'])
 def todo_list(request):
     if request.method == 'GET':
         queryset = Todo.objects.all()
@@ -72,17 +75,18 @@ def todo_list(request):
         return Response(serializer.data, status = status.HTTP_200_OK)
     else:
         listPK = request.data.get("listPK")
-        todo_list = Todo.objects.get(pk = listPK)
+        todo_list = Todo.objects.get(pk=listPK)
         todo_list.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-#리스트 생성
+
+# 리스트 생성
 @api_view(["POST"])
 def addTodo(request):
     categoryPK = request.data.get("categoryPK")
     title = request.data.get("title")
     content = request.data.get('content')
-    
+
     category = Category.objects.get(pk = categoryPK)
 
     if not title and not content:
