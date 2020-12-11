@@ -83,19 +83,25 @@ def todo_list(request):
 # 리스트 생성
 @api_view(["POST"])
 def addTodo(request):
+    token = request.data.get("token")
     categoryPK = request.data.get("categoryPK")
     title = request.data.get("title")
     content = request.data.get('content')
 
-    category = Category.objects.get(pk=categoryPK)
+    category = Category.objects.get(pk = categoryPK)
+
+    user = authorize(token)
+    if not user:
+        return Response(status = status.HTTP_401_UNAUTHORIZED)
 
     if not title and not content:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status = status.HTTP_400_BAD_REQUEST)
     elif not title:
-        category.todos.create(title="ListTitle", content=content)
-        return Response(status=status.HTTP_200_OK)
+        category.todos.create(title = "<Empty_title>", content = content)
+        return Response(status = status.HTTP_200_OK)
     elif not content:
-        category.todos.create(title=title, content='')
-        return Response(status=status.HTTP_200_OK)
-    category.todos.create(title=title, content=content)
-    return Response(status=status.HTTP_200_OK)
+        category.todos.create(title = title, content = '')
+        return Response(status = status.HTTP_200_OK)
+
+    category.todos.create(title = title, content = content)
+    return Response(status = status.HTTP_200_OK)
