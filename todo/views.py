@@ -2,8 +2,12 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from utils.authorized import authorize
-from todo.models import Category
-from todo.serializers import CategorySerializer
+from todo.models import Category, Todo
+from user.models import User
+from todo.serializers import CategorySerializer, TodoSerializer
+from core.serializers import TodoListSerializer
+from rest_framework.views import APIView
+
 
 @api_view(['GET', 'POST'])
 def add_category(request):
@@ -53,4 +57,39 @@ def add_todo(request):
     return Response(data={
         "content": "success",
     })
+
+
+'''------------------LDK------------------------------'''
+
+#리스트 전체 조회
+@api_view(['GET','DELETE'])
+def todo_list(request):
+    if request.method == 'GET':
+        queryset = Todo.objects.all()
+        serializer = TodoSerializer(queryset, many = True)
+        return Response(serializer.data)
+    else:
+        listPK = request.data.get("listPK")
+        todo_list = Todo.objects.get(pk = listPK)
+        todo_list.delete()
+        return Response(status = 204)
+
+#리스트 생성
+@api_view(["POST"])
+def post(request):
+    categoryPK = request.data.get("categoryPK")
+    title = request.data.get("title")
+    content = request.data.get('content')
+    
+    category = Category.objects.get(pk = categoryPK)
+    if not title and not content:
+        return Response(status = 400)
+    elif not title:
+        category.todos.create(title = "ListTitle", content = content)
+        return Response(status = 200)
+    elif not content:
+        category.todos.create(title = title, content = '')
+        return Response(status = 200)
+    category.todos.create(title = title, content = content)
+    return Response(status = 200)
 
