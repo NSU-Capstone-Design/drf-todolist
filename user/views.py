@@ -45,18 +45,26 @@ def getMyTodoList(request):
         "myTodoList": category.data
     })
 
+
 '''----------------------------------------------LDK----------------------------'''
-@api_view(['GET', 'POST'])
+
+
+@api_view(['POST'])
 def signUp(request):
     userID = request.data.get("id")
     password = request.data.get('password')
     checkpwd = request.data.get('checkpwd')
 
+    if not password or not userID or not checkpwd:
+        return Response(data={"response": 1})
+
     if password != checkpwd:
-        return Response(status = 400)
-    
-    newUser = User(id = userID, password = password)
-    newUser.save()
-    serializer = UserSerializer(newUser)
-    return Response(serializer.data, status = 200)
-    
+        return Response(data={"response": 2})
+    try:
+        User.objects.get(login_id=userID)
+        return Response(data={"response": 3})
+    except:
+        newUser = User(login_id=userID, password=password)
+        newUser.save()
+        serializer = UserSerializer(newUser)
+        return Response(serializer.data, status=status.HTTP_200_OK)

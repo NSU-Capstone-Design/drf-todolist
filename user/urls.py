@@ -4,6 +4,7 @@ from user.views import *  # views/__init__.py 에서 status_check.py를 모듈�
 
 urlpatterns = [
     path('status_check/', status_check, name='status_check'),
-    path('token/', login),
-    path('mylist/', getMyTodoList)
+    path('login/', login),
+    path('mylist/', getMyTodoList),
+    path('signup/', signUp)
 ]
