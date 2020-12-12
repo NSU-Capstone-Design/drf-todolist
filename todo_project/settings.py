@@ -13,7 +13,7 @@ SECRET_KEY = 'z9h6w*(k01ug7owea=a67=13(6e1^lx$1h(^&pv+ne@6ryh+5k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [".ap-northeast-2.compute.amazonaws.com"]
+ALLOWED_HOSTS = ["ec2-54-159-3-52.compute-1.amazonaws.com"]
 CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ORIGIN_WHITELIST = (
 #     'http://:3000',
